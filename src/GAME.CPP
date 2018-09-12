@@ -121,20 +121,46 @@ void Game::saveGame (std::string filename) {
 
         for (unsigned int i = 0; i < scenes.size (); i++) {
 
-            file << scenes [i].name << "\n";
+            file << scenes [i].name << " | " << "\n";
 
-            file << scenes [i].description << "\n";
+            file << scenes [i].description << " | " << "\n";
 
             file << scenes [i].choices.size () << "\n";
 
             for (unsigned int j = 0; j < scenes [i].choices.size (); j++) {
 
-                file << scenes [i].choices [j].name << "\n";
+                file << scenes [i].choices [j].name << " | " << "\n";
 
                 file << scenes [i].choices [j].sceneIDToSwitchTo << "\n";
 
+                for (unsigned int k = 0; k < scenes [i].choices [j].modifiedValueAmounts.size (); k++) {
+
+                    file << scenes [i].choices [j].modifiedValueAmounts [k] << "\n";
+
+                    file << scenes [i].choices [j].modifiedValueNames [k] << " | " << "\n";
+                }
+
             }
 
+        }
+
+        file << flags.size () << "\n";
+
+        for (unsigned int i = 0; i < flags.size (); i++) {
+
+            file << flags [i].name << " | " << "\n";
+
+            file << flags [i].isTrue << "\n";
+
+        }
+
+        file << gameIntegers.size () << "\n";
+
+        for (unsigned int i = 0; i < gameIntegers.size (); i++) {
+
+            file << gameIntegers [i].name << " | " << "\n";
+
+            file << gameIntegers [i].value << "\n";
         }
 
         file.close ();
