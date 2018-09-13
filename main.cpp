@@ -1,13 +1,11 @@
-#include <iostream>
 #include <windows.h>
-#include "Game.h"
+#include "EDITOR.H"
 
 int main()
 {
 
-    Game testing;
-    testing.loadGame ("test_save");
-    testing.loop ();
+    Editor editor;
+    editor.start ();
 
     return 0;
 

@@ -14,6 +14,8 @@ class Game
         std::vector <GameInteger> gameIntegers;
         std::vector <Scene> scenes;
 
+        std::string filename = "";
+
         void loadGame (std::string filename);
         void saveGame (std::string filename);
 

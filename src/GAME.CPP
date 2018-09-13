@@ -17,6 +17,8 @@ void Game::loadGame (std::string filename) {
     std::string line;
     std::ifstream file (filename + ".game");
 
+    Game::filename = filename;
+
     if (file.is_open())  {
 
         int sceneSize;
@@ -104,6 +106,8 @@ void Game::loadGame (std::string filename) {
 
             gameIntegers.push_back (gameInteger);
         }
+
+        std::cout << "Game loaded!" << std::endl;
 
         file.close ();
 
