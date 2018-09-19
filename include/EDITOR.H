@@ -18,6 +18,10 @@ class Editor
     protected:
 
     private:
+
+        void editScene (int integerInput);
+
+        Choice createChoiceFromPlayerInput ();
 };
 
 #endif // EDITOR_H

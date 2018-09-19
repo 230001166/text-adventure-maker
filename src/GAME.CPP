@@ -137,11 +137,14 @@ void Game::saveGame (std::string filename) {
 
                 file << scenes [i].choices [j].sceneIDToSwitchTo << "\n";
 
+                file << scenes [i].choices [j].modifiedValueAmounts.size () << "\n";
+
                 for (unsigned int k = 0; k < scenes [i].choices [j].modifiedValueAmounts.size (); k++) {
+
+                    file << scenes [i].choices [j].modifiedValueNames [k] << " | " << "\n";
 
                     file << scenes [i].choices [j].modifiedValueAmounts [k] << "\n";
 
-                    file << scenes [i].choices [j].modifiedValueNames [k] << " | " << "\n";
                 }
 
             }
