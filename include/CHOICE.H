@@ -10,6 +10,13 @@ struct Choice {
     std::vector <std::string> modifiedValueNames;
     std::vector <int> modifiedValueAmounts;
 
+    std::vector <std::string> modifiedFlagNames;
+    std::vector <int> flagValues;
+
+    bool requiresFlagToBeAvailable = false;
+    bool flagComparisionType = true;
+    int flagIndex = 0;
+
 };
 
 #endif // CHOICE_H

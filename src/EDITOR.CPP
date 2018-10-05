@@ -1,4 +1,5 @@
 #include "Editor.h"
+#include "textGraphics.h"
 #include <iostream>
 
 Editor::Editor()
@@ -84,7 +85,7 @@ void Editor::editScene (int integerInput) {
 
         for (unsigned int i = 0; i < game.scenes [integerInput].choices.size (); i++) {
 
-            std::cout << "[" << i << "] " << game.scenes [integerInput].choices [i].name << std::endl;
+            std::cout << "[" << i << "] " << game.scenes [integerInput].choices [i].name << " -> " << game.scenes [integerInput].choices [i].sceneIDToSwitchTo << std::endl;
 
         }
 
@@ -140,6 +141,34 @@ void Editor::editScene (int integerInput) {
 
 }
 
+void Editor::outputInvalidChoices (int sceneIndex) {
+
+    std::vector <int> invalidChoiceIndices;
+
+    for (unsigned int i = 0; i < game.scenes [sceneIndex].choices.size (); i++) {
+
+        if (game.scenes [sceneIndex].choices [i].sceneIDToSwitchTo < 0 || game.scenes [sceneIndex].choices [i].sceneIDToSwitchTo >= game.scenes.size ()) {
+
+            invalidChoiceIndices.push_back (i);
+
+        }
+
+    }
+
+    for (unsigned int i = 0; i < invalidChoiceIndices.size (); i++) {
+
+        if (i == 0) { std::cout << " - Invalid Choices ["; }
+
+        textGraphics::changeTextColor (12);
+
+        std::cout << invalidChoiceIndices [i];
+
+        if (i + 1 == invalidChoiceIndices.size ()) { textGraphics::changeTextColor (15); std::cout << "]"; } else { textGraphics::changeTextColor (15); std::cout << ","; }
+
+    }
+
+}
+
 void Editor::loop () {
 
     bool isLooping = true;
@@ -148,8 +177,8 @@ void Editor::loop () {
 
     while (isLooping) {
 
-        std::cout << "[G]ame Save | [L]oad Game" << std::endl;
-        std::cout << "[S]cenes: " << game.scenes.size () << " | [F]lags: " << game.flags.size () << " |" << std::endl;
+        std::cout << "[G]ame Save | [L]oad Game | [Q]uit" << std::endl;
+        std::cout << "[S]cenes: " << game.scenes.size () << " | Fl[a]gs: " << game.flags.size () << " | [F]ilename: " << game.filename << std::endl;
 
         std::cin >> input;
 
@@ -159,7 +188,35 @@ void Editor::loop () {
 
         }
 
+        if (input == 'l') {
+
+            std::cout << "Input a file name to load: ";
+
+            std::cin >> game.filename;
+
+            game.loadGame (game.filename);
+
+        }
+
         if (input == 'q') { isLooping = false; }
+
+        if (input == 'a') {
+
+            Flag temp;
+
+            std::cout << "Enter the new flag's name: ";
+
+            std::cin.ignore ();
+
+            std::getline (std::cin, temp.name);
+
+            std::cout << "Enter the flag's value: (0 or 1, where 0 is false and 1 is true) ";
+
+            std::cin >> temp.isTrue;
+
+            game.flags.push_back (temp);
+
+        }
 
         if (input == 'F' || input == 'f') {
 
@@ -175,11 +232,11 @@ void Editor::loop () {
 
         if (input == 's' || input == 'S') {
 
-            std::cout << "[E]dit Scene [A]dd Scene [D]elete Scene\nScenes:" << std::endl;
+            std::cout << "[S]top Editing Scenes [E]dit Scene [A]dd Scene [D]elete Scene\nScenes:" << std::endl;
 
             for (unsigned int i = 0; i < game.scenes.size (); i++) {
 
-                std::cout << "[" << i << "] " << game.scenes [i].name << std::endl;
+                std::cout << "[" << i << "] " << game.scenes [i].name; outputInvalidChoices (i); std::cout << " " << std::endl;
 
             }
 

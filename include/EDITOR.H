@@ -21,6 +21,8 @@ class Editor
 
         void editScene (int integerInput);
 
+        void outputInvalidChoices (int sceneIndex);
+
         Choice createChoiceFromPlayerInput ();
 };
 

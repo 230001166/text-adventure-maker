@@ -1,6 +1,6 @@
 #ifndef GAMEINTEGER_H
 #define GAMEINTEGER_H
-
+#include <string>
 
 struct GameInteger {
 

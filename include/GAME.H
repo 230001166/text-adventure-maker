@@ -27,9 +27,13 @@ class Game
 
         void readFileInputUntilDelimiter (std::ifstream &file, std::string &input, std::string delimiter);
 
+        bool flagComparisionIsTrue (bool flagComparision, Flag flag);
+
         bool choiceIsValid (int choiceIndex);
 
         int returnIndexOfGameIntegerFromName (std::string name);
+
+        int returnIndexOfFlagFromName (std::string name);
 
         int currentScene = 0;
 };
