@@ -71,6 +71,62 @@ Choice Editor::createChoiceFromPlayerInput () {
 
     std::cin >> newChoice.sceneIDToSwitchTo;
 
+    int numberOfGameVariablesToModify = 0;
+
+    std::cout << "Number of game integers to modify: ";
+
+    std::cin >> numberOfGameVariablesToModify;
+
+    for (int i = 0; i < numberOfGameVariablesToModify; i++) {
+
+        std::string gameIntegerName;
+
+        std::cout << "Enter name of game integer to modify: ";
+
+        std::cin.ignore ();
+
+        std::getline (std::cin, gameIntegerName);
+
+        newChoice.modifiedValueNames.push_back (gameIntegerName);
+
+        int amountToModify = 0;
+
+        std::cout << "Enter the amount to modify this integer: ";
+
+        std::cin >> amountToModify;
+
+        newChoice.modifiedValueAmounts.push_back (amountToModify);
+
+    }
+
+    int numberOfFlagsToModify = 0;
+
+    std::cout << "Number of flags to modify: ";
+
+    std::cin >> numberOfFlagsToModify;
+
+    for (int i = 0; i < numberOfFlagsToModify; i++) {
+
+        std::string flagName;
+
+        std::cout << "Enter name of flag to modify: ";
+
+        std::cin.ignore ();
+
+        std::getline (std::cin, flagName);
+
+        newChoice.modifiedValueNames.push_back (flagName);
+
+        bool value = 0;
+
+        std::cout << "Enter the amount to modify this flag (0 = false, 1 = true): ";
+
+        std::cin >> value;
+
+        newChoice.flagValues.push_back (value);
+
+    }
+
     return newChoice;
 
 }
@@ -81,11 +137,11 @@ void Editor::editScene (int integerInput) {
 
     while (stillEditing) {
 
-        std::cout << game.scenes [integerInput].name << "\n" << game.scenes [integerInput].description << std::endl;
+        std::cout << game.gamedata.scenes [integerInput].name << "\n" << game.gamedata.scenes [integerInput].description << std::endl;
 
-        for (unsigned int i = 0; i < game.scenes [integerInput].choices.size (); i++) {
+        for (unsigned int i = 0; i < game.gamedata.scenes [integerInput].choices.size (); i++) {
 
-            std::cout << "[" << i << "] " << game.scenes [integerInput].choices [i].name << " -> " << game.scenes [integerInput].choices [i].sceneIDToSwitchTo << std::endl;
+            std::cout << "[" << i << "] " << game.gamedata.scenes [integerInput].choices [i].name << " -> " << game.gamedata.scenes [integerInput].choices [i].sceneIDToSwitchTo << std::endl;
 
         }
 
@@ -101,7 +157,7 @@ void Editor::editScene (int integerInput) {
 
             Choice newChoice = createChoiceFromPlayerInput ();
 
-            game.scenes [integerInput].choices.push_back (newChoice);
+            game.gamedata.scenes [integerInput].choices.push_back (newChoice);
 
         }
 
@@ -113,9 +169,9 @@ void Editor::editScene (int integerInput) {
 
             std::cin >> input;
 
-            if (input >= 0 && input < game.scenes.size ()) {
+            if (input >= 0 && input < game.gamedata.scenes.size ()) {
 
-                game.scenes.erase (game.scenes.begin () + input);
+                game.gamedata.scenes.erase (game.gamedata.scenes.begin () + input);
 
             }
 
@@ -127,13 +183,13 @@ void Editor::editScene (int integerInput) {
 
             std::cin.ignore ();
 
-            std::getline (std::cin, game.scenes [integerInput].name);
+            std::getline (std::cin, game.gamedata.scenes [integerInput].name);
 
             std::cout << "New Scene Description: ";
 
             std::cin.ignore ();
 
-            std::getline (std::cin, game.scenes [integerInput].description);
+            std::getline (std::cin, game.gamedata.scenes [integerInput].description);
 
         }
 
@@ -145,9 +201,9 @@ void Editor::outputInvalidChoices (int sceneIndex) {
 
     std::vector <int> invalidChoiceIndices;
 
-    for (unsigned int i = 0; i < game.scenes [sceneIndex].choices.size (); i++) {
+    for (unsigned int i = 0; i < game.gamedata.scenes [sceneIndex].choices.size (); i++) {
 
-        if (game.scenes [sceneIndex].choices [i].sceneIDToSwitchTo < 0 || game.scenes [sceneIndex].choices [i].sceneIDToSwitchTo >= game.scenes.size ()) {
+        if (game.gamedata.scenes [sceneIndex].choices [i].sceneIDToSwitchTo < 0 || game.gamedata.scenes [sceneIndex].choices [i].sceneIDToSwitchTo >= game.gamedata.scenes.size ()) {
 
             invalidChoiceIndices.push_back (i);
 
@@ -169,6 +225,70 @@ void Editor::outputInvalidChoices (int sceneIndex) {
 
 }
 
+Scene Editor::createSceneFromPlayerInput () {
+
+    Scene test;
+
+    std::cout << "New Scene Name: ";
+
+    std::cin.ignore ();
+
+    std::getline (std::cin, test.name);
+
+    std::cout << "New Scene Description: ";
+
+    std::cin.ignore ();
+
+    std::getline (std::cin, test.description);
+
+    bool loop = true;
+
+    while (loop) {
+
+        char input = '0';
+
+        std::cout << "[A]dd Choice [D]elete Choice [S]ave Scene" << std::endl;
+
+        std::cin >> input;
+
+        if (input == 'a' || input == 'A') {
+
+            Choice newChoice = createChoiceFromPlayerInput ();
+
+            test.choices.push_back (newChoice);
+
+        }
+
+        if (input == 'd' || input == 'D') {
+
+            std::cout << "Which choice do you want to delete? ";
+
+            int choiceNumber = 0;
+
+            std::cin >> choiceNumber;
+
+            if (choiceNumber >= 0 && choiceNumber < test.choices.size ()) {
+
+                test.choices.erase (test.choices.begin () + choiceNumber);
+
+                std::cout << "choice " << choiceNumber << " erased!" << std::endl;
+
+            }
+
+        }
+
+        if (input == 's' || input == 'S') {
+
+            loop = false;
+
+        }
+
+    }
+
+    return test;
+
+}
+
 void Editor::loop () {
 
     bool isLooping = true;
@@ -178,7 +298,8 @@ void Editor::loop () {
     while (isLooping) {
 
         std::cout << "[G]ame Save | [L]oad Game | [Q]uit" << std::endl;
-        std::cout << "[S]cenes: " << game.scenes.size () << " | Fl[a]gs: " << game.flags.size () << " | [F]ilename: " << game.filename << std::endl;
+        std::cout << "[S]cenes: " << game.gamedata.scenes.size () << " | Fl[a]gs: " << game.gamedata.flags.size ()
+            << " | Game [I]ntegers : " << game.gamedata.gameIntegers.size () << " | [F]ilename: " << game.filename << std::endl;
 
         std::cin >> input;
 
@@ -214,7 +335,25 @@ void Editor::loop () {
 
             std::cin >> temp.isTrue;
 
-            game.flags.push_back (temp);
+            game.gamedata.flags.push_back (temp);
+
+        }
+
+        if (input == 'I' || input == 'i') {
+
+            GameInteger temp;
+
+            std::cout << "Enter the new game integer's name: ";
+
+            std::cin.ignore ();
+
+            std::getline (std::cin, temp.name);
+
+            std::cout << "Enter the game integer's value: ";
+
+            std::cin >> temp.value;
+
+            game.gamedata.gameIntegers.push_back (temp);
 
         }
 
@@ -234,9 +373,9 @@ void Editor::loop () {
 
             std::cout << "[S]top Editing Scenes [E]dit Scene [A]dd Scene [D]elete Scene\nScenes:" << std::endl;
 
-            for (unsigned int i = 0; i < game.scenes.size (); i++) {
+            for (unsigned int i = 0; i < game.gamedata.scenes.size (); i++) {
 
-                std::cout << "[" << i << "] " << game.scenes [i].name; outputInvalidChoices (i); std::cout << " " << std::endl;
+                std::cout << "[" << i << "] " << game.gamedata.scenes [i].name; outputInvalidChoices (i); std::cout << " " << std::endl;
 
             }
 
@@ -256,75 +395,9 @@ void Editor::loop () {
 
             if (input == 'a') {
 
-                Scene test;
+                Scene test = createSceneFromPlayerInput ();
 
-                std::cout << "New Scene Name: ";
-
-                std::cin.ignore ();
-
-                std::getline (std::cin, test.name);
-
-                std::cout << "New Scene Description: ";
-
-                std::cin.ignore ();
-
-                std::getline (std::cin, test.description);
-
-                bool loop = true;
-
-                while (loop) {
-
-                    std::cout << "[A]dd Choice [D]elete Choice" << std::endl;
-
-                    std::cin >> input;
-
-                    if (input == 'a' || input == 'A') {
-
-                        Choice newChoice;
-
-                        std::cout << "New Choice Name: ";
-
-                        std::cin.ignore ();
-
-                        std::getline (std::cin, newChoice.name); std::cout << "> " << newChoice.name << std::endl;
-
-                        std::cout << "Scene number to switch to: ";
-
-                        std::cin >> newChoice.sceneIDToSwitchTo;
-
-                        std::cout << "Saving choice..." << std::endl;
-
-                        test.choices.push_back (newChoice);
-
-                    }
-
-                    if (input == 'd' || input == 'D') {
-
-                        std::cout << "Which choice do you want to delete? ";
-
-                        int choiceNumber = 0;
-
-                        std::cin >> choiceNumber;
-
-                        if (choiceNumber >= 0 && choiceNumber < test.choices.size ()) {
-
-                            test.choices.erase (test.choices.begin () + choiceNumber);
-
-                            std::cout << "choice " << choiceNumber << " erased!" << std::endl;
-
-                        }
-
-                    }
-
-                    if (input == 's' || input == 'S') {
-
-                        loop = false;
-
-                    }
-
-                }
-
-                game.scenes.push_back (test);
+                game.gamedata.scenes.push_back (test);
 
             }
 
@@ -336,9 +409,9 @@ void Editor::loop () {
 
                 std::cin >> sceneNumber;
 
-                if (sceneNumber >= 0 && sceneNumber < game.scenes.size ()) {
+                if (sceneNumber >= 0 && sceneNumber < game.gamedata.scenes.size ()) {
 
-                    game.scenes.erase (game.scenes.begin () + sceneNumber);
+                    game.gamedata.scenes.erase (game.gamedata.scenes.begin () + sceneNumber);
 
                     std::cout << "Scene " << sceneNumber << " erased!" << std::endl;
 

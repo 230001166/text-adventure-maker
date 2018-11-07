@@ -14,8 +14,8 @@ Game::~Game()
 
 void Game::loadGame (std::string filename) {
 
-    std::string line;
-    std::ifstream file (filename + ".game");
+    std::string line, filenameString = filename + ".game";
+    std::ifstream file (filenameString.c_str ());
 
     Game::filename = filename;
 
@@ -25,7 +25,7 @@ void Game::loadGame (std::string filename) {
 
         file >> sceneSize;
 
-        scenes.clear ();
+        gamedata.scenes.clear ();
 
         for (unsigned int i = 0; i < sceneSize; i++) {
 
@@ -87,11 +87,19 @@ void Game::loadGame (std::string filename) {
 
                 file >> choice.flagIndex;
 
+                readFileInputUntilDelimiter (file, choice.integerComparisionType, "|");
+
+                file >> choice.requiresAmountToBeAvailable;
+
+                file >> choice.integerIndex;
+
+                file >> choice.amount;
+
                 tempScene.choices.push_back (choice);
 
             }
 
-            scenes.push_back (tempScene);
+            gamedata.scenes.push_back (tempScene);
 
         }
 
@@ -99,7 +107,7 @@ void Game::loadGame (std::string filename) {
 
         file >> flagSize;
 
-        flags.clear ();
+        gamedata.flags.clear ();
 
         for (unsigned int i = 0; i < flagSize; i++) {
 
@@ -111,7 +119,7 @@ void Game::loadGame (std::string filename) {
 
             file >> tempFlag.isTrue;
 
-            flags.push_back (tempFlag);
+            gamedata.flags.push_back (tempFlag);
 
         }
 
@@ -119,7 +127,7 @@ void Game::loadGame (std::string filename) {
 
         file >> gameIntegerSize;
 
-        gameIntegers.clear ();
+        gamedata.gameIntegers.clear ();
 
         for (unsigned int i = 0; i < gameIntegerSize; i++) {
 
@@ -131,7 +139,7 @@ void Game::loadGame (std::string filename) {
 
             file >> gameInteger.value;
 
-            gameIntegers.push_back (gameInteger);
+            gamedata.gameIntegers.push_back (gameInteger);
         }
 
         std::cout << "Game loaded!" << std::endl;
@@ -144,73 +152,81 @@ void Game::loadGame (std::string filename) {
 
 void Game::saveGame (std::string filename) {
 
-    std::ofstream file (filename);
+    std::ofstream file (filename.c_str ());
 
     if (file.is_open()) {
 
-        file << scenes.size () << "\n";
+        file <<  gamedata.scenes.size () << "\n";
 
-        for (unsigned int i = 0; i < scenes.size (); i++) {
+        for (unsigned int i = 0; i < gamedata.scenes.size (); i++) {
 
-            file << scenes [i].name << " | " << "\n";
+            file <<  gamedata.scenes [i].name << " | " << "\n";
 
-            file << scenes [i].description << " | " << "\n";
+            file << gamedata.scenes [i].description << " | " << "\n";
 
-            file << scenes [i].choices.size () << "\n";
+            file << gamedata.scenes [i].choices.size () << "\n";
 
-            for (unsigned int j = 0; j < scenes [i].choices.size (); j++) {
+            for (unsigned int j = 0; j < gamedata.scenes [i].choices.size (); j++) {
 
-                file << scenes [i].choices [j].name << " | " << "\n";
+                file << gamedata.scenes [i].choices [j].name << " | " << "\n";
 
-                file << scenes [i].choices [j].sceneIDToSwitchTo << "\n";
+                file << gamedata.scenes [i].choices [j].sceneIDToSwitchTo << "\n";
 
-                file << scenes [i].choices [j].modifiedValueAmounts.size () << "\n";
+                file << gamedata.scenes [i].choices [j].modifiedValueAmounts.size () << "\n";
 
-                for (unsigned int k = 0; k < scenes [i].choices [j].modifiedValueAmounts.size (); k++) {
+                for (unsigned int k = 0; k < gamedata.scenes [i].choices [j].modifiedValueAmounts.size (); k++) {
 
-                    file << scenes [i].choices [j].modifiedValueNames [k] << " | " << "\n";
+                    file << gamedata.scenes [i].choices [j].modifiedValueNames [k] << " | " << "\n";
 
-                    file << scenes [i].choices [j].modifiedValueAmounts [k] << "\n";
-
-                }
-
-                file << scenes [i].choices [j].flagValues.size () << "\n";
-
-                for (unsigned int k = 0; k < scenes [i].choices [j].flagValues.size (); k++) {
-
-                    file << scenes [i].choices [j].modifiedFlagNames [k] << " | " << "\n";
-
-                    file << scenes [i].choices [j].flagValues [k] << "\n";
+                    file << gamedata.scenes [i].choices [j].modifiedValueAmounts [k] << "\n";
 
                 }
 
-                file << scenes [i].choices [j].flagComparisionType << "\n";
+                file << gamedata.scenes [i].choices [j].flagValues.size () << "\n";
 
-                file << scenes [i].choices [j].requiresFlagToBeAvailable << "\n";
+                for (unsigned int k = 0; k < gamedata.scenes [i].choices [j].flagValues.size (); k++) {
 
-                file << scenes [i].choices [j].flagIndex << "\n";
+                    file << gamedata.scenes [i].choices [j].modifiedFlagNames [k] << " | " << "\n";
+
+                    file << gamedata.scenes [i].choices [j].flagValues [k] << "\n";
+
+                }
+
+                file << gamedata.scenes [i].choices [j].flagComparisionType << "\n";
+
+                file << gamedata.scenes [i].choices [j].requiresFlagToBeAvailable << "\n";
+
+                file << gamedata.scenes [i].choices [j].flagIndex << "\n";
+
+                file << gamedata.scenes [i].choices [j].integerComparisionType << " | " << "\n";
+
+                file << gamedata.scenes [i].choices [j].requiresAmountToBeAvailable << "\n";
+
+                file << gamedata.scenes [i].choices [j].integerIndex << "\n";
+
+                file << gamedata.scenes [i].choices [j].amount << "\n";
 
             }
 
         }
 
-        file << flags.size () << "\n";
+        file << gamedata.flags.size () << "\n";
 
-        for (unsigned int i = 0; i < flags.size (); i++) {
+        for (unsigned int i = 0; i < gamedata.flags.size (); i++) {
 
-            file << flags [i].name << " | " << "\n";
+            file << gamedata.flags [i].name << " | " << "\n";
 
-            file << flags [i].isTrue << "\n";
+            file << gamedata.flags [i].isTrue << "\n";
 
         }
 
-        file << gameIntegers.size () << "\n";
+        file << gamedata.gameIntegers.size () << "\n";
 
-        for (unsigned int i = 0; i < gameIntegers.size (); i++) {
+        for (unsigned int i = 0; i < gamedata.gameIntegers.size (); i++) {
 
-            file << gameIntegers [i].name << " | " << "\n";
+            file << gamedata.gameIntegers [i].name << " | " << "\n";
 
-            file << gameIntegers [i].value << "\n";
+            file << gamedata.gameIntegers [i].value << "\n";
         }
 
         file.close ();
@@ -239,6 +255,8 @@ void Game::readFileInputUntilDelimiter (std::ifstream &file, std::string &input,
 
         }
 
+        input.pop_back ();
+
     }
 
 }
@@ -249,7 +267,15 @@ void Game::loop () {
 
     while (isLooping) {
 
-        scenes [currentScene].render ();
+        renderer.render (gamedata.scenes [currentScene], gamedata);
+
+        std::cout << "Game Integers" << std::endl;
+
+        for (unsigned int i = 0; i < gamedata.gameIntegers.size (); i++) {
+
+            std::cout << "[" << i << "] - " << gamedata.gameIntegers [i].name << " - " << gamedata.gameIntegers [i].value << std::endl;
+
+        }
 
         bool loopingInput = true;
 
@@ -259,33 +285,33 @@ void Game::loop () {
 
             std::cin >> choice;
 
-            if (choiceIsValid (choice)) {
+            if (choiceIsValid (choice-1)) {
 
-                for (unsigned int i = 0; i < scenes [currentScene].choices [choice-1].modifiedValueAmounts.size (); i++) {
+                for (unsigned int i = 0; i < gamedata.scenes [currentScene].choices [choice-1].modifiedValueAmounts.size (); i++) {
 
-                    int index = returnIndexOfGameIntegerFromName (scenes [currentScene].choices [choice-1].modifiedValueNames [i]);
+                    int index = returnIndexOfGameIntegerFromName (gamedata.scenes [currentScene].choices [choice-1].modifiedValueNames [i]);
 
                     if (index != -1) {
 
-                        gameIntegers [index].value += scenes [currentScene].choices [choice-1].modifiedValueAmounts [i];
+                        gamedata.gameIntegers [index].value += gamedata.scenes [currentScene].choices [choice-1].modifiedValueAmounts [i];
 
                     }
 
                 }
 
-                for (unsigned int i = 0; i < scenes [currentScene].choices [choice-1].flagValues.size (); i++) {
+                for (unsigned int i = 0; i < gamedata.scenes [currentScene].choices [choice-1].flagValues.size (); i++) {
 
-                    int index = returnIndexOfFlagFromName (scenes [currentScene].choices [choice-1].modifiedFlagNames [i]);
+                    int index = returnIndexOfFlagFromName (gamedata.scenes [currentScene].choices [choice-1].modifiedFlagNames [i]);
 
                     if (index != -1) {
 
-                        flags [index].isTrue = scenes [currentScene].choices [choice-1].flagValues [i];
+                        gamedata.flags [index].isTrue = gamedata.scenes [currentScene].choices [choice-1].flagValues [i];
 
                     }
 
                 }
 
-                currentScene = scenes [currentScene].choices [choice-1].sceneIDToSwitchTo;
+                currentScene = gamedata.scenes [currentScene].choices [choice-1].sceneIDToSwitchTo;
 
                 loopingInput = false;
 
@@ -307,23 +333,71 @@ bool Game::flagComparisionIsTrue (bool flagComparision, Flag flag) {
 
 }
 
+bool Game::integerComparisionIsTrue (std::string integerComparision, GameInteger gameInteger, int amount) {
+
+    if (integerComparision == "equal to" && gameInteger.value == amount) { return true; }
+
+    if (integerComparision == "greater than" && gameInteger.value > amount) { return true; }
+
+    if (integerComparision == "less than" && gameInteger.value < amount) { return true; }
+
+    return false;
+
+}
+
 bool Game::choiceIsValid (int choiceIndex) {
 
-    if (choiceIndex-1 >= scenes [currentScene].choices.size () || choiceIndex-1 < 0) {
+    if (choiceIndex >= gamedata.scenes [currentScene].choices.size () || choiceIndex < 0) {
 
         return false;
 
     } else {
 
-        if (flagComparisionIsTrue (scenes [currentScene].choices [choiceIndex].flagComparisionType,
-                flags [scenes [currentScene].choices [choiceIndex].flagIndex])
-            || scenes [currentScene].choices [choiceIndex].requiresFlagToBeAvailable == false) {
+        if (gamedata.scenes [currentScene].choices [choiceIndex].requiresFlagToBeAvailable == false
+            && gamedata.scenes [currentScene].choices [choiceIndex].requiresAmountToBeAvailable == false) {
 
             return true;
 
         } else {
 
-            return false;
+            if (gamedata.flags.size () > 0 && gamedata.scenes [currentScene].choices [choiceIndex].requiresFlagToBeAvailable) {
+
+                if (flagComparisionIsTrue (gamedata.scenes [currentScene].choices [choiceIndex].flagComparisionType,
+                    gamedata.flags [gamedata.scenes [currentScene].choices [choiceIndex].flagIndex])) {
+
+                    return true;
+
+                } else {
+
+                    return false;
+
+                }
+
+            } else if (gamedata.scenes [currentScene].choices [choiceIndex].requiresFlagToBeAvailable) {
+
+                return false;
+
+            }
+
+            if (gamedata.gameIntegers.size () > 0) {
+
+                if (integerComparisionIsTrue (gamedata.scenes [currentScene].choices [choiceIndex].integerComparisionType,
+                    gamedata.gameIntegers [gamedata.scenes [currentScene].choices [choiceIndex].integerIndex],
+                    gamedata.scenes [currentScene].choices [choiceIndex].amount)) {
+
+                    return true;
+
+                } else {
+
+                    return false;
+
+                }
+
+            } else {
+
+                return false;
+
+            }
 
         }
 
@@ -334,9 +408,9 @@ bool Game::choiceIsValid (int choiceIndex) {
 
 int Game::returnIndexOfGameIntegerFromName (std::string name) {
 
-    for (unsigned int i = 0; i < gameIntegers.size (); i++) {
+    for (unsigned int i = 0; i < gamedata.gameIntegers.size (); i++) {
 
-        if (gameIntegers [i].name == name) {
+        if (gamedata.gameIntegers [i].name == name) {
 
             return i;
 
@@ -350,9 +424,9 @@ int Game::returnIndexOfGameIntegerFromName (std::string name) {
 
 int Game::returnIndexOfFlagFromName (std::string name) {
 
-    for (unsigned int i = 0; i < flags.size (); i++) {
+    for (unsigned int i = 0; i < gamedata.flags.size (); i++) {
 
-        if (flags [i].name == name) {
+        if (gamedata.flags [i].name == name) {
 
             return i;
 

@@ -1,11 +1,1 @@
-Conditions
-- Conditional Choices
-- Conditional Messages
-
-Types of Conditions
-integerCondition
-- compare gameInteger to value
-- <, =, >
-flagCondition
-- compare flag to value
-- true, false
+Scene renders conditional choices when valid

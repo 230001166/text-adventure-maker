@@ -17,6 +17,11 @@ struct Choice {
     bool flagComparisionType = true;
     int flagIndex = 0;
 
+    bool requiresAmountToBeAvailable = false;
+    std::string integerComparisionType = "equal to";
+    int integerIndex = 0;
+    int amount = 0;
+
 };
 
 #endif // CHOICE_H

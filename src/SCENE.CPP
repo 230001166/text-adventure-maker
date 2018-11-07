@@ -19,7 +19,11 @@ void Scene::render () {
 
     for (unsigned int i = 0; i < choices.size (); i++) {
 
-        std::cout << "[" << i+1 << "] - " << choices [i].name << std::endl;
+        if (!choices [i].requiresAmountToBeAvailable && !choices [i].requiresFlagToBeAvailable) {
+
+            std::cout << "[" << i+1 << "] - " << choices [i].name << std::endl;
+
+        }
 
     }
 

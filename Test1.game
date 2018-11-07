@@ -1,0 +1,160 @@
+7
+The War Room |
+You are sitting in the war room, staring at a whiteboard. The whiteboard has plans for taking over Project Lead the Way written on it. |
+2
+Grab a food |
+1
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Go outside |
+2
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Kitchen |
+You grab a food. You consume the food and feel replenished. Delicious and nutritious. |
+2
+Go back to the War Room |
+0
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Go outside |
+2
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+The Outside |
+ou stand in the Outside. There is a gnome standing in the middle of your Yard. There is a car in the middle of your driveway. There is a door behind you that goes to the Indoors. |
+3
+Go Indoor |
+1
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Inspect Gnome |
+3
+1
+Key |
+1
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Inspect Car |
+4
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+The Outside - Inspecting Gnome |
+ou inspect the gnome. After frisking it, you find a key. |
+1
+Nice |
+2
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+The Outside - Inspecting Carr |
+ou inspect your carr. Perhaps you could get in if you had a kay. |
+2
+Go back |
+2
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Insert kay |
+5
+0
+0
+1
+0
+0
+equal to |
+1
+0
+1
+Driving Carr |
+ou are driving your carr. |
+1
+Go to Nansemond River |
+6
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+Nansemond River |
+his is where bad people go when they die. |
+1
+Be smart and skip school |
+2
+0
+0
+1
+0
+0
+equal to |
+0
+0
+0
+0
+1
+Key |
+0

@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-#include "Flag.h"
-#include "GameInteger.h"
-#include "Scene.h"
+#include "Renderer.h"
 
 class Game
 {
@@ -10,9 +8,9 @@ class Game
         Game();
         virtual ~Game();
 
-        std::vector <Flag> flags;
-        std::vector <GameInteger> gameIntegers;
-        std::vector <Scene> scenes;
+        GameDataStructures gamedata;
+
+        Renderer renderer;
 
         std::string filename = "";
 
@@ -28,6 +26,8 @@ class Game
         void readFileInputUntilDelimiter (std::ifstream &file, std::string &input, std::string delimiter);
 
         bool flagComparisionIsTrue (bool flagComparision, Flag flag);
+
+        bool integerComparisionIsTrue (std::string integerComparision, GameInteger gameInteger, int amount);
 
         bool choiceIsValid (int choiceIndex);
 
