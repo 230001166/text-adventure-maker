@@ -289,6 +289,280 @@ Scene Editor::createSceneFromPlayerInput () {
 
 }
 
+std::string Editor::returnBooleanAsString (bool booleanInput) {
+
+    if (booleanInput) { return "True"; } else { return "False"; }
+
+}
+
+void Editor::displayAllFlags () {
+
+    for (unsigned int i = 0; i < game.gamedata.flags.size (); i++) {
+
+        std::cout << "[" << i << "] " << game.gamedata.flags [i].name << " | " << returnBooleanAsString (game.gamedata.flags [i].isTrue) << std::endl;
+
+    }
+
+}
+
+void Editor::editFlag (int flagIndex) {
+
+    bool stillEditing = true;
+
+    while (stillEditing) {
+
+        if (flagIndex < 0 || flagIndex >= game.gamedata.flags.size ()) { stillEditing = false; }
+
+        std::cout << game.gamedata.flags [flagIndex].name << " | " << game.gamedata.flags [flagIndex].isTrue << std::endl;
+
+        std::cout << "Change [N]ame | Change [V]alue | [S]top Editing Flag" << std::endl;
+
+        char input;
+
+        std::cin >> input;
+
+        if (input == 'N' || input == 'n') {
+
+            std::cout << "Enter a new name for the flag: ";
+
+            std::cin >> game.gamedata.flags [flagIndex].name;
+
+        }
+
+        if (input == 'V' || input == 'v') {
+
+            std::cout << "Enter a value for the flag (0 is false, 1 is true): ";
+
+            std::cin >> game.gamedata.flags [flagIndex].isTrue;
+
+        }
+
+        if (input == 'S' || input == 's') {
+
+            stillEditing = false;
+
+        }
+
+    }
+
+}
+
+void Editor::editFlags () {
+
+    bool stillEditing = true;
+
+    while (stillEditing) {
+
+        displayAllFlags ();
+
+        std::cout << "[A]dd Flag | [E]dit Flag | [D]elete Flag | [S]top Editing Flags" << std::endl;
+
+        char input = ' ';
+
+        std::cin >> input;
+
+        if (input == 'A' || input == 'a') {
+
+            Flag temp;
+
+            std::cout << "Enter the new flag's name: ";
+
+            std::cin.ignore ();
+
+            std::getline (std::cin, temp.name);
+
+            std::cout << "Enter the flag's value (0 or 1, where 0 is false and 1 is true): ";
+
+            std::cin >> temp.isTrue;
+
+            game.gamedata.flags.push_back (temp);
+
+        }
+
+        if (input == 'E' || input == 'e') {
+
+            std::cout << "Input the flag number to edit: ";
+
+            int flagIndex = -1;
+
+            std::cin >> flagIndex;
+
+            if (flagIndex >= 0 && flagIndex < game.gamedata.flags.size ()) {
+
+                editFlag (flagIndex);
+
+            } else {
+
+                std::cout << "Invalid index!" << std::endl;
+
+            }
+
+        }
+
+        if (input == 'D' || input == 'd') {
+
+            std::cout << "Input the flag number to delete: ";
+
+            int flagIndex = -1;
+
+            std::cin >> flagIndex;
+
+            if (flagIndex >= 0 && flagIndex < game.gamedata.flags.size ()) {
+
+                game.gamedata.flags.erase (game.gamedata.flags.begin () + flagIndex);
+
+            } else {
+
+                std::cout << "Invalid index!" << std::endl;
+
+            }
+
+        }
+
+        if (input == 'S' || input == 's') {
+
+            stillEditing = false;
+
+        }
+
+    }
+
+}
+
+void Editor::displayAllGameIntegers () {
+
+    for (unsigned int i = 0; i < game.gamedata.gameIntegers.size (); i++) {
+
+        std::cout << "[" << i << "] " << game.gamedata.gameIntegers [i].name << " | " << game.gamedata.gameIntegers [i].value << std::endl;
+
+    }
+
+}
+
+void Editor::editGameInteger (int integerIndex) {
+
+    bool stillEditing = true;
+
+    while (stillEditing) {
+
+        if (integerIndex < 0 || integerIndex >= game.gamedata.gameIntegers.size ()) { stillEditing = false; }
+
+        std::cout << game.gamedata.gameIntegers [integerIndex].name << " | " << game.gamedata.gameIntegers [integerIndex].value << std::endl;
+
+        std::cout << "Change [N]ame | Change [V]alue | [S]top Editing Integer" << std::endl;
+
+        char input;
+
+        std::cin >> input;
+
+        if (input == 'N' || input == 'n') {
+
+            std::cout << "Enter a new name for the integer: ";
+
+            std::cin >> game.gamedata.gameIntegers [integerIndex].name;
+
+        }
+
+        if (input == 'V' || input == 'v') {
+
+            std::cout << "Enter a value for the integer: ";
+
+            std::cin >> game.gamedata.gameIntegers [integerIndex].value;
+
+        }
+
+        if (input == 'S' || input == 's') {
+
+            stillEditing = false;
+
+        }
+
+    }
+
+}
+
+void Editor::editGameIntegers () {
+
+    bool stillEditing = true;
+
+    while (stillEditing) {
+
+        displayAllGameIntegers ();
+
+        std::cout << "[A]dd Integer | [E]dit Integer | [D]elete Integer | [S]top Editing Integers" << std::endl;
+
+        char input = ' ';
+
+        std::cin >> input;
+
+        if (input == 'A' || input == 'a') {
+
+            GameInteger temp;
+
+            std::cout << "Enter the new game integer's name: ";
+
+            std::cin.ignore ();
+
+            std::getline (std::cin, temp.name);
+
+            std::cout << "Enter the game integer's value: ";
+
+            std::cin >> temp.value;
+
+            game.gamedata.gameIntegers.push_back (temp);
+
+        }
+
+        if (input == 'E' || input == 'e') {
+
+            std::cout << "Input the index of the integer to edit: ";
+
+            int integerIndex = -1;
+
+            std::cin >> integerIndex;
+
+            if (integerIndex >= 0 && integerIndex < game.gamedata.gameIntegers.size ()) {
+
+                editGameInteger (integerIndex);
+
+            } else {
+
+                std::cout << "Invalid index!" << std::endl;
+
+            }
+
+        }
+
+        if (input == 'D' || input == 'd') {
+
+            std::cout << "Input the index of the integer to delete: ";
+
+            int integerIndex = -1;
+
+            std::cin >> integerIndex;
+
+            if (integerIndex >= 0 && integerIndex < game.gamedata.gameIntegers.size ()) {
+
+                game.gamedata.gameIntegers.erase (game.gamedata.gameIntegers.begin () + integerIndex);
+
+            } else {
+
+                std::cout << "Invalid index!" << std::endl;
+
+            }
+
+        }
+
+        if (input == 'S' || input == 's') {
+
+            stillEditing = false;
+
+        }
+
+    }
+
+}
+
 void Editor::loop () {
 
     bool isLooping = true;
@@ -323,37 +597,13 @@ void Editor::loop () {
 
         if (input == 'a') {
 
-            Flag temp;
-
-            std::cout << "Enter the new flag's name: ";
-
-            std::cin.ignore ();
-
-            std::getline (std::cin, temp.name);
-
-            std::cout << "Enter the flag's value: (0 or 1, where 0 is false and 1 is true) ";
-
-            std::cin >> temp.isTrue;
-
-            game.gamedata.flags.push_back (temp);
+            editFlags ();
 
         }
 
         if (input == 'I' || input == 'i') {
 
-            GameInteger temp;
-
-            std::cout << "Enter the new game integer's name: ";
-
-            std::cin.ignore ();
-
-            std::getline (std::cin, temp.name);
-
-            std::cout << "Enter the game integer's value: ";
-
-            std::cin >> temp.value;
-
-            game.gamedata.gameIntegers.push_back (temp);
+            editGameIntegers ();
 
         }
 

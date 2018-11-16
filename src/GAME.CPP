@@ -269,11 +269,11 @@ void Game::loop () {
 
         renderer.render (gamedata.scenes [currentScene], gamedata);
 
-        std::cout << "Game Integers" << std::endl;
+        std::cout << "Flags" << std::endl;
 
-        for (unsigned int i = 0; i < gamedata.gameIntegers.size (); i++) {
+        for (unsigned int i = 0; i < gamedata.flags.size (); i++) {
 
-            std::cout << "[" << i << "] - " << gamedata.gameIntegers [i].name << " - " << gamedata.gameIntegers [i].value << std::endl;
+            std::cout << "[" << i << "] - " << gamedata.flags [i].name << " - " << gamedata.flags [i].isTrue << std::endl;
 
         }
 

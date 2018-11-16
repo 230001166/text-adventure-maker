@@ -23,6 +23,20 @@ class Editor
 
         void outputInvalidChoices (int sceneIndex);
 
+        std::string returnBooleanAsString (bool booleanInput);
+
+        void displayAllFlags ();
+
+        void editFlag (int flagIndex);
+
+        void editFlags ();
+
+        void displayAllGameIntegers ();
+
+        void editGameInteger (int integerIndex);
+
+        void editGameIntegers ();
+
         Choice createChoiceFromPlayerInput ();
 
         Scene createSceneFromPlayerInput ();
