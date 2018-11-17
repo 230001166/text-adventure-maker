@@ -37,6 +37,8 @@ class Editor
 
         void editGameIntegers ();
 
+        void editChoice (int sceneIndex, int choiceIndex);
+
         Choice createChoiceFromPlayerInput ();
 
         Scene createSceneFromPlayerInput ();

@@ -131,6 +131,85 @@ Choice Editor::createChoiceFromPlayerInput () {
 
 }
 
+void Editor::editChoice (int sceneIndex, int choiceIndex) {
+
+    bool stillEditing = true;
+
+    while (stillEditing) {
+
+        std::cout << game.gamedata.scenes [sceneIndex].choices [choiceIndex].name << std::endl;
+        std::cout << "Change Choice [N]ame | Add [F]lag Requirement | Add [I]nteger Requirement | [S]top Editing" << std::endl;
+
+        char input = ' ';
+
+        std::cin >> input;
+
+        if (input == 'N' || input == 'n') {
+
+            std::cout << "Enter the new name for the choice: ";
+
+            std::cin.ignore ();
+
+            std::getline (std::cin, game.gamedata.scenes [sceneIndex].choices [choiceIndex].name);
+
+        }
+
+        if (input == 'F' || input == 'f') {
+
+            game.gamedata.scenes [sceneIndex].choices [choiceIndex].requiresFlagToBeAvailable = true;
+
+            std::cout << "Enter the index of the flag required for this choice: ";
+
+            std::cin >> game.gamedata.scenes [sceneIndex].choices [choiceIndex].flagIndex;
+
+            std::cout << "Should the flag be (0) false or (1) true for this choice to appear? ";
+
+            std::cin >> game.gamedata.scenes [sceneIndex].choices [choiceIndex].flagComparisionType;
+
+        }
+
+        if (input == 'I' || input == 'i') {
+
+            game.gamedata.scenes [sceneIndex].choices [choiceIndex].requiresAmountToBeAvailable = true;
+
+            std::cout << "Enter the index of the integer required for this choice: ";
+
+            std::cin >> game.gamedata.scenes [sceneIndex].choices [choiceIndex].integerIndex;
+
+            std::cout << "Enter a value to compare the integer to: ";
+
+            std::cin >> game.gamedata.scenes [sceneIndex].choices [choiceIndex].amount;
+
+            std::cout << "Should the integer be (0) less than, (1) equal to, or (2) greater than the above amount for this choice to appear? ";
+
+            int tempIntegerInput = 0; std::cin >> tempIntegerInput;
+
+            if (tempIntegerInput == 0 || tempIntegerInput < 0 || tempIntegerInput > 2) {
+
+                game.gamedata.scenes [sceneIndex].choices [choiceIndex].integerComparisionType = "less than";
+
+            } else if (tempIntegerInput == 1) {
+
+                game.gamedata.scenes [sceneIndex].choices [choiceIndex].integerComparisionType = "equal to";
+
+            } else if (tempIntegerInput == 2) {
+
+                game.gamedata.scenes [sceneIndex].choices [choiceIndex].integerComparisionType = "greater than";
+
+            }
+
+        }
+
+        if (input == 'S' || input == 's') {
+
+            stillEditing = false;
+
+        }
+
+    }
+
+}
+
 void Editor::editScene (int integerInput) {
 
     bool stillEditing = true;
@@ -147,13 +226,29 @@ void Editor::editScene (int integerInput) {
 
         std::cout << "[S]ave Scene | [A]dd Choice | [E]dit Choice | [D]elete Choice | Edit [N]ame and Description" << std::endl;
 
-        std::string textInput = "";
+        char textInput = ' ';
 
         std::cin >> textInput;
 
-        if (textInput == "S" || textInput == "s") { stillEditing = false; }
+        if (textInput == 'E' || textInput == 'e') {
 
-        if (textInput == "A" || textInput == "a") {
+            std::cout << "Enter the index of the choice you want to edit: ";
+
+            int choiceIndex = 0;
+
+            std::cin >> choiceIndex;
+
+            if (choiceIndex >= 0 && choiceIndex < game.gamedata.scenes [integerInput].choices.size ()) {
+
+                editChoice (integerInput, choiceIndex);
+
+            }
+
+        }
+
+        if (textInput == 'S' || textInput == 's') { stillEditing = false; }
+
+        if (textInput == 'A' || textInput == 'a') {
 
             Choice newChoice = createChoiceFromPlayerInput ();
 
@@ -161,7 +256,7 @@ void Editor::editScene (int integerInput) {
 
         }
 
-        if (textInput == "D" || textInput == "d") {
+        if (textInput == 'D' || textInput == 'd') {
 
             std::cout << "Input scene number to delete: ";
 
@@ -177,7 +272,7 @@ void Editor::editScene (int integerInput) {
 
         }
 
-        if (textInput == "N" || textInput == "n") {
+        if (textInput == 'N' || textInput == 'n') {
 
             std::cout << "New Scene Name: ";
 
